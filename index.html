@@ -1,63 +1,48 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <script src="http://d3js.org/d3.v3.min.js"></script>
-  <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
-    <style>
-      circle.dimple-series-1 {
-        fill: red;
-      }
-      h2 {
-        text-align: center;
-      }
-    </style>
-    <script type="text/javascript">
-      function draw(data) {
-
-      /*
-        D3.js setup code
-      */
-
-          "use strict";
-          var margin = 75,
-              width = 1400 - margin,
-              height = 600 - margin;
-
-          d3.select('body')
-            .append('h2')
-            .text('World Cup Attendance');
-
-          var svg = d3.select("body")
-            .append("svg")
-              .attr("width", width + margin)
-              .attr("height", height + margin)
-            .append('g')
-                .attr('class','chart');
-
-      /*
-        Dimple.js Chart construction code
-      */
-
-          var myChart = new dimple.chart(svg, data);
-          var x = myChart.addTimeAxis("x", "year");
-          myChart.addMeasureAxis("y", "attendance");
-          x.dateParseFormat = "%Y";
-          x.tickFormat = "%Y";
-          x.timeInterval = 4;
-          myChart.addSeries(null, dimple.plot.line);
-          myChart.addSeries(null, dimple.plot.scatter);
-          myChart.draw();
-        };
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>D3 Test</title>
+        <script src="http://d3js.org/d3.v3.min.js"></script>
+        <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+        <style>
+          h2 {
+            text-align: center;
+          }
+          svg {
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+          }
+        </style>
+        <script type="text/javascript">
+          function draw(dataset) {
+              var w = 1000;
+              var h = 500;
+              var padding = 50;
+              d3.select('body')
+                .append('h2')
+                .text('Homerun');
+              var svg = d3.select("body")
+                          .append("svg")
+                          .attr("width", w)
+                          .attr("height", h)
+                          .append("g")
+                          .attr("class", "chart");
+              var myChart = new dimple.chart(svg, dataset);
+              var x = myChart.addAxis("x", "weight");
+              var y = myChart.addAxis("y", "avg");
+              var z = myChart.addMeasureAxis("z", "HR");
+              x.title = "weight";
+              y.title = "batting average";
+              myChart.addSeries("name", dimple.plot.bubble);
+              myChart.draw();
+            };
       </script>
-  </head>
-<body>
-  <script type="text/javascript">
-  /*
-    Use D3 (not dimple.js) to load the TSV file
-    and pass the contents of it to the draw function
-    */
-  d3.tsv("world_cup.tsv", draw);
-  </script>
-</body>
+    </head>
+    <body>
+        <script type="text/javascript">
+          d3.csv("./data/baseball_data.csv", draw);
+        </script>
+    </body>
 </html>
