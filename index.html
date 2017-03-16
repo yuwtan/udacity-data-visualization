@@ -3,26 +3,30 @@
     <head>
         <meta charset="utf-8">
         <title>D3 Test</title>
+        <link href="css/style.css" rel="stylesheet" type="text/css"/>
         <script src="http://d3js.org/d3.v3.min.js"></script>
         <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
-        <style>
-          h2 {
-            text-align: center;
-          }
-          svg {
-            margin-left: auto;
-            margin-right: auto;
-            display: block;
-          }
-        </style>
         <script type="text/javascript">
           function draw(dataset) {
+              var handDictionay = {};
+              handDictionay['L'] = 'Left Handed';
+              handDictionay['R'] = 'Right Handed';
+              handDictionay['B'] = 'Both Handed';
+              
+              dataset.forEach(function(d) {
+                d.weight = +d.weight;
+                d.HR = +d.HR;
+                d.avg = +d.avg;
+                d.height = +d.height;
+                d.handedness = handDictionay[d.handedness]
+              });
               var w = 1000;
               var h = 500;
-              var padding = 50;
+              
+              
               d3.select('body')
                 .append('h2')
-                .text('Homerun');
+                .text("Relationship between Height and Batting Average of Baseball Players");
               var svg = d3.select("body")
                           .append("svg")
                           .attr("width", w)
@@ -30,12 +34,15 @@
                           .append("g")
                           .attr("class", "chart");
               var myChart = new dimple.chart(svg, dataset);
-              var x = myChart.addAxis("x", "weight");
-              var y = myChart.addAxis("y", "avg");
-              var z = myChart.addMeasureAxis("z", "HR");
-              x.title = "weight";
-              y.title = "batting average";
-              myChart.addSeries("name", dimple.plot.bubble);
+              var x = myChart.addMeasureAxis("x", "height");
+              x.overrideMin = 64; x.overrideMax = 80;
+              var y = myChart.addMeasureAxis("y", "avg");
+              y.tickFormat = '.2f';
+              x.title = "Height (in)";
+              y.title = "Batting Average";
+              var mySeries = myChart.addSeries(['height','handedness'], dimple.plot.bubble);
+              mySeries.aggregate = dimple.aggregateMethod.avg;
+              myChart.addLegend(550, 20, 360, 20, "right");
               myChart.draw();
             };
       </script>
