@@ -12,7 +12,8 @@ I choose to make a scatterplot because I want to show this two-variable elations
 
 ## Feedback
 
-####vishy730:
+### vishy730:
+
 First of all congrats on getting yourself till here. The visualization looks good. However, I would like to add a couple of points here as the basic criteria for this project is to tell a story via visualization. Having said that, you can start the story with some description or introduction kind of thing something like this.
 
 Does height of a player effect the batting average? Let us see some interesting trends and identify the relationship between the two.
@@ -20,11 +21,13 @@ Does height of a player effect the batting average? Let us see some interesting 
 Are there any trends that you could show with the help of a color line or anything else?
 
 
-####gugu:
+### gugu:
+
 I think this is a good visualization. However, I think it is not very convincing by showing simply the averages. For example, the blue point at height 79 looks more like an outlier for me. It would be great if you could show me the confidence intervals, or just show me the count of players for each point, which I think could be easy to implement by changing the size of the point.
 
 
-####usagi:
+### usagi:
+
 From the visualization, I can clearly see that as the height increases, the batting average decreases. I have some questions and suggestions.
 1. Since I am not a baseball fan, it would be nice if you could add comments that help me to understand the meaning of variables.
 2. I got confused with the dependent variable at first. It seems that you are showing the average of "batting average", not simply "batting average". Is it correct?
