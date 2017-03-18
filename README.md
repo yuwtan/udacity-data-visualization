@@ -3,12 +3,14 @@
 
 ## Summary
 
-This data visualization shows the trend of the mean batting average batting against the height of baseball players. In this chart, the x coordinate of a point stands for a height, and the y coordinate stand for the mean batting average of players of that height. Players of different handedness are denoted by the color of the point. The trend is clear that shorter players tend to have higher batting average, except very tall players.
+This data visualization shows the trend that shorter baseball players tend to have higher batting average batting. In this visualization, baseball players are grouped by height (x coordinate) and handedness (color). The number of players in a group is denoted by the bubble size, and the average of batting average within a group is shown by the y coordinate. The trend is clear for all handedness, with very few outliers.
 
 
 ## Design
 
-I choose to make a scatterplot because I want to show this two-variable elationship. It is easy for readers to figure out what the height and mean batting average are for each point on the chart and tell the trend across different height values. I use colors to encode handedness. Given there are only 3 options, the color encoding is not confusing readers and easy to distinguish. I also put the legend to the right top corner which is easy to find.
+Firstly, I chose to make a scatterplot because I wanted to show this two-variable elationship. It is easy for readers to figure out what the height and mean batting average are for each point on the chart and tell the trend across different height values. I used colors to encode handedness. Given there are only 3 options, the color encoding would not confuse readers and is easy to distinguish. I also put the legend to the right top corner which is easy to find.
+
+After I got all these feedbacks, I decided to improve my visualization with better layout and animation. I added a title and some comments that help readers to perceive my story. I also changed the simple scatterplot to a bubble plot which could show the population of each group and make readers clear about the trend power as well as the outliers. Finally, I applied animation to the visualization so readers could choose what handedness they want to focus on. The chart is even clearer when readers choose to only check one handedness.
 
 ## Feedback
 

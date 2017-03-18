@@ -3,48 +3,148 @@
     <head>
         <meta charset="utf-8">
         <title>D3 Test</title>
-        <link href="css/style.css" rel="stylesheet" type="text/css"/>
+        <style>
+          svg {
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+          }
+        </style>
         <script src="http://d3js.org/d3.v3.min.js"></script>
         <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
         <script type="text/javascript">
           function draw(dataset) {
-              var handDictionay = {};
-              handDictionay['L'] = 'Left Handed';
-              handDictionay['R'] = 'Right Handed';
-              handDictionay['B'] = 'Both Handed';
-              
-              dataset.forEach(function(d) {
-                d.weight = +d.weight;
-                d.HR = +d.HR;
-                d.avg = +d.avg;
-                d.height = +d.height;
-                d.handedness = handDictionay[d.handedness]
-              });
-              var w = 1000;
-              var h = 500;
-              
-              
-              d3.select('body')
-                .append('h2')
-                .text("Relationship between Height and Batting Average of Baseball Players");
-              var svg = d3.select("body")
-                          .append("svg")
-                          .attr("width", w)
-                          .attr("height", h)
-                          .append("g")
-                          .attr("class", "chart");
-              var myChart = new dimple.chart(svg, dataset);
-              var x = myChart.addMeasureAxis("x", "height");
-              x.overrideMin = 64; x.overrideMax = 80;
-              var y = myChart.addMeasureAxis("y", "avg");
-              y.tickFormat = '.2f';
-              x.title = "Height (in)";
-              y.title = "Batting Average";
-              var mySeries = myChart.addSeries(['height','handedness'], dimple.plot.bubble);
-              mySeries.aggregate = dimple.aggregateMethod.avg;
-              myChart.addLegend(550, 20, 360, 20, "right");
-              myChart.draw();
-            };
+            var handDictionay = {};
+            handDictionay['L'] = 'Left'; handDictionay['R'] = 'Right'; handDictionay['B'] = 'Both';
+            
+            dataset.forEach(function (d) {
+              d.weight = +d.weight;
+              d.HR = +d.HR;
+              d.avg = +d.avg;
+              d.height = +d.height;
+              d.handedness = handDictionay[d.handedness];
+            });
+            // svg setup
+            var w = 900;
+            var h = 600;
+            var padding = 50;
+
+            var svg = d3.select("body")
+                        .append("svg")
+                        .attr("width", w)
+                        .attr("height", h)
+                        .append("g")
+                        .attr("class", "chart");
+            
+            
+            // create title
+            svg.append("text")
+               .attr("x", 20)
+               .attr("y", 20)
+               .style("text-anchor", "left")
+               .style("font-family", "New Times Roman")
+               .style("font-weight", "bold")
+               .style("font-size", "20px")
+               .text("In Baseball, Shorter Means Better");
+
+            // tell the story
+            svg.selectAll("story")
+               .data(["In a study of 1157 baseball players, we find a trend that as the height increases, players tend to have higher batting average, which indicates better performance,",
+               " no matter he/she is left-handed, right-handed, or both-handed.",
+               "",
+               "The chart below is showing the trend based on the study. Each bubble stands for a group of players of the same heigh and handedness. The vertical position of a",
+               "bubble shows how players in that group averagely perform in batting average, and the size of the bubble shows how many players are in that group.",
+               "",
+               "Note: for those unfamiliar with \"batting average\", this term tells the ratio of a batter's safe hits per times at bat. It is a good metric for a player's skill as a batsman. "])
+               .enter()
+               .append("text")
+               .attr("x", 20)
+               .attr("y", function(d, i) { return 50 + i * 14; } )
+               .style("font-size", "12px")
+               .style("color", "Black")
+               .style("font-family", "sans-serif")
+               .text(function (d) { return d; });
+            
+            // create chart
+            var myChart = new dimple.chart(svg, dataset);
+            myChart.setBounds(padding, 2 * padding + 75, w - padding - 10, h - 3 * padding - 60);
+
+            var xAxis = myChart.addMeasureAxis("x", "height");
+            var yAxis = myChart.addMeasureAxis("y", "avg");
+            var zAxis = myChart.addMeasureAxis("z", "name");
+
+            xAxis.overrideMin = 64; xAxis.overrideMax = 82;
+            yAxis.overrideMin = 0.00; yAxis.overrideMax = 0.35;
+            yAxis.tickFormat = '.2f';
+            
+            xAxis.title = "Height (in)";
+            yAxis.title = "Batting Average";
+            zAxis.title = "Number of Players"
+            
+            var mySeries = myChart.addSeries(['height','handedness'], dimple.plot.bubble);
+            mySeries.aggregate = dimple.aggregateMethod.avg;
+            mySeries.getTooltipText = function (e) {
+              return [
+                "Height: " + (e.xValue).toFixed(0) + " in.",
+                "Handedness: " + e.aggField[1],
+                "Number of Players: " + (e.zValue).toFixed(0),
+                "Batting Average: " + (e.yValue).toFixed(2)
+                ];
+              };
+
+            // create legend area
+            svg.selectAll("legendArea")
+               .data(["Handedness:"])
+               .enter()
+               .append("text")
+               .attr("x", 60)
+               .attr("y", padding + 110)
+               .style("font-size", "12px")
+               .style("font-weight", "bold")
+               .style("font-family", "sans-serif")
+               .style("color", "Black")
+               .text(function (d) { return d; });
+            var myLegend = myChart.addLegend(padding + 100, padding + 102, w/2, h/4, "left");
+            svg.selectAll("legendClick")
+               .data(["*Click color box to show/hide handedness"])
+               .enter()
+               .append("text")
+               .attr("x", padding + 300)
+               .attr("y", padding + 110)
+               .style("font-size", "11px")
+               .style("font-family", "sans-serif")
+               .style("font-style", "italic")
+               .style("color", "Black")
+               .text(function (d) { return d; });
+            
+
+            myChart.draw();
+            myChart.legends = [];
+
+            // add legend animation
+            var handnessVals = dimple.getUniqueValues(dataset, "handedness");
+            myLegend.shapes.selectAll("rect")
+                           .on("click", function (e) {
+                            var hideRect = false;
+                            var newFilter = [];
+                            handnessVals.forEach(function (f) {
+                              if (f == e.aggField.slice(-1)[0]) {
+                                hideRect = true;
+                              } else {
+                                newFilter.push(f);
+                              }
+                            });
+                            if (hideRect) {
+                              d3.select(this).style("opacity", 0.2);
+                            } else {
+                              newFilter.push(e.aggField.slice(-1)[0]);
+                              d3.select(this).style("opacity", 1);
+                            }
+                            handnessVals = newFilter;
+                            myChart.data = dimple.filterData(dataset, "handedness", handnessVals);
+                            myChart.draw(1000);
+                           });
+          };
       </script>
     </head>
     <body>
